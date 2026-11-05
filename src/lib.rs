@@ -38,26 +38,25 @@ impl Vector2 {
         if magnitude == 0.0 {
             return Err(String::from(
                 "The module of the vector is 0.
-                El modulo del vector es 0."
-            ))
+                El modulo del vector es 0.",
+            ));
         };
         let x = Vector2 {
-        x: (self.x / magnitude),
-        y: (self.y / magnitude),
+            x: (self.x / magnitude),
+            y: (self.y / magnitude),
         };
-        return Ok(x)
+        return Ok(x);
     }
-    pub fn scale(&self, factor:f64) -> Vector2 {
+    pub fn scale(&self, factor: f64) -> Vector2 {
         let v = Vector2 {
             x: self.x * factor,
             y: self.y * factor,
         };
-        return v
+        return v;
     }
 }
 
-impl Charge{
-
+impl Charge {
     pub fn coulomb_force(q1: &Charge, q2: &Charge) -> Result<f64, String> {
         const K: f64 = 8.99e9;
         let distance = &q1.pos.distance(&q2.pos);
@@ -71,5 +70,17 @@ impl Charge{
         let force = K * ((q1.charge * q2.charge).abs() / distance.powi(2));
         return Ok(force);
     }
-}
 
+    pub fn coulomb_force_vector(q1: &Charge, q2: &Charge) -> Result<Vector2, String> {
+        let normal = q1.pos.substract(q2.pos);
+        let normal = normal.normalize()?;
+        let module = Charge::coulomb_force(&q1, q2);
+        if q1.charge * q2.charge < 0.0 {
+            let vector = normal.scale(module?).scale(-1.0);
+            Ok(vector)
+        } else {
+            let vector = normal.scale(module?);
+            Ok(vector)
+        }
+    }
+}
