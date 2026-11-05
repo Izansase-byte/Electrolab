@@ -84,3 +84,19 @@ impl Charge {
         }
     }
 }
+
+pub fn total_force(
+    target: &Charge,
+    charges: &[Charge],
+) -> Result<Vector2, String> {
+    let mut vector = Vector2 {
+        x:0.0,
+        y:0.0,
+    };
+    for charge in charges {
+
+        let force = Charge::coulomb_force_vector(target, charge)?;
+        vector = vector.add(force)
+    };
+    return Ok(vector)
+}
