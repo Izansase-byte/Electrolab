@@ -83,20 +83,48 @@ impl Charge {
             Ok(vector)
         }
     }
+
+    pub fn electric_field(charge: &Charge, point: &Vector2) -> Result<Vector2, String> {
+        const K: f64 = 8.99e9;
+        let distance = charge.pos.distance(&point);
+        let displacement = point.substract(charge.pos);
+        let direction = displacement.normalize()?;
+        let x = charge.charge / distance.powi(2);
+        let electric_field = K*x;
+        let electric_field = direction.scale(electric_field);
+        return Ok(electric_field)
+    }
+    pub fn total_electric_field(charges:&[Charge],point: &Vector2) -> Result<Vector2, String> {
+        let mut accumulator = Vector2 {
+            x:0.0,
+            y:0.0,
+        };
+        for charge in charges {
+            let vector = Charge::electric_field(charge,point);
+            accumulator = (&accumulator).add(vector?);
+        }
+        return Ok(accumulator)
+    }
+    pub fn electric_potential(charge: &Charge,point: &Vector2) -> Result<f64, String> {
+        const K: f64 = 8.99e9;
+        let mut potential = K*charge.charge;
+        let distance = charge.pos.distance(point);
+        if distance == 0.0 {
+            return Err(String::from("
+                The potential isn't defined in the position of the charge. 
+                El potencial no está definido en la posición de la carga."
+                ,
+            ))
+        }
+        potential = potential / distance;
+        return Ok(potential)
 }
-
-pub fn total_force(
-    target: &Charge,
-    charges: &[Charge],
-) -> Result<Vector2, String> {
-    let mut vector = Vector2 {
-        x:0.0,
-        y:0.0,
-    };
-    for charge in charges {
-
-        let force = Charge::coulomb_force_vector(target, charge)?;
-        vector = vector.add(force)
-    };
-    return Ok(vector)
+    pub fn total_electric_potential(charges: &[Charge],point: &Vector2) -> Result<f64, String> {
+        let mut accumulator = 0.0;
+        for charge in charges {
+            let potential = Charge::electric_potential(charge,point)?;
+            accumulator = accumulator + potential;
+        }
+        return Ok(accumulator)
+        }
 }

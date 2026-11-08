@@ -1,0 +1,1 @@
+/Users/izansase/Programacion/electrolab/wasm/target/wasm32-unknown-unknown/debug/libelectrolab_wasm.rlib: /Users/izansase/Programacion/electrolab/physics/src/lib.rs /Users/izansase/Programacion/electrolab/wasm/src/lib.rs
