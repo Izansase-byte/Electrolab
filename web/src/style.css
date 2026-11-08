@@ -294,3 +294,8 @@ code {
     border-right-color: var(--border);
   }
 }
+#simulation {
+  border: 1px solid #777;
+  margin: 24px auto;
+  max-width: 100%;
+}
