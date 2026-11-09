@@ -296,6 +296,22 @@ code {
 }
 #simulation {
   border: 1px solid #777;
-  margin: 24px auto;
+  margin: 20px auto;
   max-width: 100%;
+}
+
+#app {
+  max-width: 900px;
+  padding:24px;
+  gap: 12px;
+  align-items: center;
+}
+
+input,
+button {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 360px;
+  padding: 10px;
+  font: inherit;
 }
